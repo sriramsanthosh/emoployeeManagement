@@ -166,6 +166,7 @@ export default function CustomPaginationActionsTable() {
           <TableRow>
             <TableCell><span className='tableColHeading'>Unique ID</span></TableCell>
             <TableCell><span className='tableColHeading'>Image</span></TableCell>
+            <TableCell><span className='tableColHeading'>Name</span></TableCell>
             <TableCell><span className='tableColHeading'>Email</span></TableCell>
             <TableCell><span className='tableColHeading'>Mobile No.</span></TableCell>
             <TableCell><span className='tableColHeading'>Designation</span></TableCell>
@@ -186,6 +187,9 @@ export default function CustomPaginationActionsTable() {
               </TableCell>
               <TableCell>
                 {row.image && <img src={row.image} alt="Uploaded" style={{ maxWidth: '100px' }} />}
+              </TableCell>
+              <TableCell>
+                {row.name}
               </TableCell>
               <TableCell>
                 {row.email}
