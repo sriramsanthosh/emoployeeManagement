@@ -41,7 +41,7 @@ export default function Login() {
     const checkToken = async()=>{
       if(localStorage.getItem("token")){
       
-        await Axios.post("http://localhost:8000/", {
+        await Axios.post("https://emoployee-management-h6ms.vercel.app/", {
           headers:{
             "Authorization": `Bearer ${localStorage.getItem("token")}`,
           }
@@ -72,7 +72,7 @@ export default function Login() {
   const handleSubmit = async(event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    await Axios.post("http://localhost:8000/login", {
+    await Axios.post("https://emoployee-management-h6ms.vercel.app/login", {
       userName: data.get('userName'),
       password: data.get('password'),
     }).then(async(res)=>{

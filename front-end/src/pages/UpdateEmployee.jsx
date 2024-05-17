@@ -73,7 +73,7 @@ export default function CreateEmployee() {
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
     //console.log(id);
-    await Axios.get(`http://localhost:8000/employee/update?id=${id}`).then(async(res)=>{
+    await Axios.get(`https://emoployee-management-h6ms.vercel.app/employee/update?id=${id}`).then(async(res)=>{
     //console.log(res.data);
 
     let temp = {
@@ -157,7 +157,7 @@ export default function CreateEmployee() {
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
     //console.log(id);
-    await Axios.patch(`http://localhost:8000/employee/update?id=${id}`, {
+    await Axios.patch(`https://emoployee-management-h6ms.vercel.app/employee/update?id=${id}`, {
       headers:{
         "Authorization": `Bearer ${localStorage.getItem("token")}`,
       },

@@ -103,7 +103,7 @@ export default function CustomPaginationActionsTable() {
 
   const handleEditEmployee = async(uniqueId) => {
     //console.log(uniqueId);
-    // await Axios.get(`http://localhost:8000/employee/update?id=${uniqueId}`, {
+    // await Axios.get(`https://emoployee-management-h6ms.vercel.app/employee/update?id=${uniqueId}`, {
     //   headers:{
     //     "Authorization": `Bearer ${localStorage.getItem("token")}`,
     //   },
@@ -121,7 +121,7 @@ export default function CustomPaginationActionsTable() {
 
   const fetchEmployeeDetails = async () => {
     try {
-      const response = await Axios.get("http://localhost:8000/employee", {
+      const response = await Axios.get("https://emoployee-management-h6ms.vercel.app/employee", {
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("token")}`,
         }

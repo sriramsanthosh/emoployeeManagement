@@ -23,7 +23,7 @@ export default function AlertDialog(props) {
   const handleDeleteClose = async(e)=>{
     e.preventDefault();
     let empId = props.empId;
-    await Axios.delete(`http://localhost:8000/employee/delete?empId=${empId}`).then(async(res)=>{
+    await Axios.delete(`https://emoployee-management-h6ms.vercel.app/employee/delete?empId=${empId}`).then(async(res)=>{
       //console.log(res.data);
       if(res.status === 200){
         let variant = "success";

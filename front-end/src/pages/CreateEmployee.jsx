@@ -102,7 +102,7 @@ export default function CreateEmployee() {
 
     // let employeeData = 
     // //console.log(employeeData);
-    await Axios.post("http://localhost:8000/employee/create", {
+    await Axios.post("https://emoployee-management-h6ms.vercel.app/employee/create", {
       headers:{
         "Authorization": `Bearer ${localStorage.getItem("token")}`,
       },
