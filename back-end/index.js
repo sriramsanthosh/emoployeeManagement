@@ -7,7 +7,7 @@ const port = process.env.port || 8000;
 
 const db = require('./config/mongoose');
 
-// app.use(express.json({ extended: false }));
+app.use(express.json({ extended: false }));
 app.use(cors());
 
 app.use(express.json({limit: '50mb'}));
