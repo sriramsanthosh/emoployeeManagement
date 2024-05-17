@@ -93,7 +93,7 @@ export default function CreateEmployee() {
   const handleSubmit = async(event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // console.log({
+    // //console.log({
     //   name: data.get('name'),
     //   email: data.get('email'),
     //   phone: data.get('phone'),
@@ -101,7 +101,7 @@ export default function CreateEmployee() {
     // }, age);
 
     // let employeeData = 
-    // console.log(employeeData);
+    // //console.log(employeeData);
     await Axios.post("http://localhost:8000/employee/create", {
       headers:{
         "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -117,17 +117,19 @@ export default function CreateEmployee() {
       if(res.status === 200){
         let variant = "success";
         enqueueSnackbar(res.data.message, { variant });
-          
       }
       else{
         localStorage.removeItem("token");
         let variant = "error";
             enqueueSnackbar(res.data.message, { variant });
-            Navigate("/");
+            // Navigate("/");
       }
     }).catch((err)=>{
-      console.log("Connection Error", err);
-    })
+      //console.log("Connection Error", err);
+      let variant = "error";
+      enqueueSnackbar("Connection Error", { variant });
+
+    });
     // Navigate("/employees");
   };
 

@@ -46,7 +46,7 @@ export default function Login() {
             "Authorization": `Bearer ${localStorage.getItem("token")}`,
           }
         }).then((res)=>{
-          console.log(res.data);
+          //console.log(res.data);
           if(res.status === 200){
 
             let variant = "";
@@ -54,12 +54,14 @@ export default function Login() {
             Navigate("/dashboard");
           }
           else{
-            
-        let variant = "error";
-        enqueueSnackbar(res.data.message, { variant });
+            let variant = "error";
+            enqueueSnackbar(res.data.message, { variant });
             localStorage.removeItem("token");
           }
-        })
+        }).catch((err)=>{
+          let variant = "error";
+          enqueueSnackbar("Connection Error", { variant });
+        });
       }
     }
 
@@ -74,12 +76,12 @@ export default function Login() {
       userName: data.get('userName'),
       password: data.get('password'),
     }).then(async(res)=>{
-      console.log(res.data);
+      //console.log(res.data);
       if(res.status === 200){
         let variant = "success";
         enqueueSnackbar(res.data.message, { variant });
         localStorage.setItem("token", res.data.token);
-        console.log(localStorage.getItem("token"), "localStorage");
+        //console.log(localStorage.getItem("token"), "localStorage");
         Navigate("/dashboard");
       }else{
         let variant = "error";

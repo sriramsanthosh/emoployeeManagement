@@ -9,12 +9,12 @@ module.exports.register = async(req, res)=>{
     if (!accountInDB.length) {
         const password = req.body.password;
         await hashPassword(password).then(async (hashedPassword) => {
-            console.log("Hashed Password:", hashedPassword);
+            // console.log("Hashed Password:", hashedPassword);
             let user = await Login.create({
                 f_userName: req.body.userName,
                 f_Pwd: hashedPassword
             });
-            console.log(user);
+            // console.log(user);
             return res.status(200).json({
                 message:"Account created.."
             });
@@ -26,9 +26,9 @@ module.exports.register = async(req, res)=>{
 module.exports.login = async (req, res) => {
     try {
         const accountInDB = await Login.find({ f_userName: req.body.userName });
-        console.log(accountInDB[0]);
+        // console.log(accountInDB[0]);
         if (!accountInDB.length) {
-            res.status(201).json({
+            return res.status(201).json({
                 message:"Account doesn't exists.."
             });
         }  
@@ -39,12 +39,15 @@ module.exports.login = async (req, res) => {
                 token: token
             });
         }  
+        return res.status(203).json({
+            message :"Incorrect credentials"
+        });
     }
     catch (err) {
-        console.log(err);
-        res.status(203).json({
+        // console.log(err);
+        return res.status(203).json({
             message: "Internal Sever Error",
             error: err
-        })
+        });
     }
 }

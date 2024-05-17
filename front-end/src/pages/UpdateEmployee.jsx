@@ -69,31 +69,62 @@ export default function CreateEmployee() {
   });
   const [image, setImage] = React.useState(null);
 
+  const fetchCurrEmployee = async()=>{
+    const searchParams = new URLSearchParams(location.search);
+    const id = searchParams.get('id');
+    //console.log(id);
+    await Axios.get(`http://localhost:8000/employee/update?id=${id}`).then(async(res)=>{
+    //console.log(res.data);
+
+    let temp = {
+      name: res.data.currEmployee.f_Name,
+      email: res.data.currEmployee.f_Email,
+      mobile: res.data.currEmployee.f_Mobile,
+      designation: res.data.currEmployee.f_Designation,
+      gender: res.data.currEmployee.f_gender,
+      courses: res.data.currEmployee.f_Course,
+      image: res.data.currEmployee.f_Image
+    };
+
+    let tempCourses = temp.courses;
+    let takenCourses = {};
+    // setCourses(tempCourses);
+    // //console.log(tempCourses);
+    // //console.log(temp);
+    setCurrEmployee(temp);
+    setDesignation(temp.designation);
+    setGender(temp.gender);
+    // setCourses(temp.courses);
+    if(tempCourses)
+    await tempCourses.map((item)=>{
+      if(item === "MCA"){
+        takenCourses.MCA = true
+      }
+      if(item === "BCA"){
+        takenCourses.BCA = true
+      }
+      if(item === "BSC"){
+        takenCourses.BSC = true
+      }
+
+    });
+    //console.log(takenCourses);
+    setImage(temp.image);
+    setCourses(takenCourses);
+
+
+
+    }).catch((err)=>{
+      //console.log("Connection Error..");
+    });
+
+  }
+
   React.useEffect(()=>{
     
-    const fetchCurrEmployee = async()=>{
-      const searchParams = new URLSearchParams(location.search);
-      const id = searchParams.get('id');
-      console.log(id);
-      await Axios.get(`http://localhost:8000/employee/update?id=${id}`).then(async(res)=>{
-      console.log(res.data);
-
-      let temp = {
-        name: res.data.currEmployee.f_Name,
-        email: res.data.currEmployee.f_Email,
-        mobile: res.data.currEmployee.f_Mobile,
-        gender: res.data.currEmployee.f_gender,
-        courses: res.data.currEmployee.f_course,
-        image: res.data.currEmployee.f_Image
-      };
-      console.log(temp);
-      }).catch((err)=>{
-        console.log("Connection Error..");
-      });
-
-    }
+    
     fetchCurrEmployee();
-  })
+  }, [])
 
   const handleAgeChange = (event) => {
     setAge(event.target.value);
@@ -118,14 +149,15 @@ export default function CreateEmployee() {
     }
   };
 
-  const [currEmployee, setCurrEmployee] = React.useState({
-    name:"Itha Sriram"
-  });
+  const [currEmployee, setCurrEmployee] = React.useState();
 
   const handleSubmit = async(event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    await Axios.post("http://localhost:8000/employee/update", {
+    const searchParams = new URLSearchParams(location.search);
+    const id = searchParams.get('id');
+    //console.log(id);
+    await Axios.patch(`http://localhost:8000/employee/update?id=${id}`, {
       headers:{
         "Authorization": `Bearer ${localStorage.getItem("token")}`,
       },
@@ -147,7 +179,7 @@ export default function CreateEmployee() {
         enqueueSnackbar(res.data.message, { variant });
       }
     }).catch((err)=>{
-      console.log("Connection Error", err);
+      //console.log("Connection Error", err);
     })
     // Navigate("/employees");
   };
@@ -170,7 +202,7 @@ export default function CreateEmployee() {
           <Typography component="h1" variant="h5">
             Update Employee
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          {currEmployee && <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               fullWidth
@@ -178,9 +210,7 @@ export default function CreateEmployee() {
               label="Name"
               name="name"
               type="text"
-              autoComplete="fname"
               defaultValue={currEmployee.name}
-              autoFocus
             />
             <TextField
               margin="normal"
@@ -189,7 +219,7 @@ export default function CreateEmployee() {
               label="Email Address"
               name="email"
               type="email"
-              autoComplete="email"
+              defaultValue={currEmployee.email}
             />
             <TextField
               margin="normal"
@@ -198,7 +228,7 @@ export default function CreateEmployee() {
               label="Phone"
               type="text"
               id="phone"
-              autoComplete="phone"
+              defaultValue={currEmployee.mobile}
             />
 
             <FormControl fullWidth margin="normal">
@@ -276,9 +306,10 @@ export default function CreateEmployee() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Create
+              Update
             </Button>
           </Box>
+}
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>

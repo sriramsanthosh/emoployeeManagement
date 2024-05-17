@@ -102,7 +102,7 @@ export default function CustomPaginationActionsTable() {
   };
 
   const handleEditEmployee = async(uniqueId) => {
-    console.log(uniqueId);
+    //console.log(uniqueId);
     // await Axios.get(`http://localhost:8000/employee/update?id=${uniqueId}`, {
     //   headers:{
     //     "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -115,44 +115,51 @@ export default function CustomPaginationActionsTable() {
 
   const handleDeleteEmployee = (e) => {
     e.preventDefault();
+    
     // handle delete logic
   };
 
-  React.useEffect(() => {
-    const fetchEmployeeDetails = async () => {
-      try {
-        const response = await Axios.get("http://localhost:8000/employee", {
-          headers: {
-            "Authorization": `Bearer ${localStorage.getItem("token")}`,
-          }
-        });
-        if (response.status === 200) {
-          const employeeDetails = response.data.employeeDetails;
-          setRows(employeeDetails.map(data => ({
-            uniqueId: data._id,
-            name: data.f_Name,
-            email: data.f_Email,
-            mobile: data.f_Mobile,
-            designation: data.f_Designation,
-            createDate: data.f_Createdate,
-            gender: data.f_gender,
-            course: data.f_Course,
-            image: data.f_Image
-          })));
-        } else {
-          enqueueSnackbar(response.data.message, { variant: "error" });
+  const fetchEmployeeDetails = async () => {
+    try {
+      const response = await Axios.get("http://localhost:8000/employee", {
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
         }
-      } catch (error) {
-        console.error("Connection Error:", error);
+      });
+      if (response.status === 200) {
+        const employeeDetails = response.data.employeeDetails;
+        //console.log(employeeDetails);
+        setRows(employeeDetails.map(data => ({
+          uniqueId: data._id,
+          name: data.f_Name,
+          email: data.f_Email,
+          mobile: data.f_Mobile,
+          designation: data.f_Designation,
+          createDate: data.f_Createdate,
+          gender: data.f_gender,
+          course: data.f_Course,
+          image: data.f_Image
+        })));
+      } else {
+        enqueueSnackbar(response.data.message, { variant: "error" });
       }
-    };
+    } catch (error) {
+      console.error("Connection Error:", error);
+    }
+  };
+
+  React.useEffect(() => {
+    
     fetchEmployeeDetails();
   }, [enqueueSnackbar]);
 
   return (
     <TableContainer component={Paper}>
-      <div style={{textAlign:"right"}}>
-      <Button variant="contained" color='secondary'>Total Employees = {rows.length}</Button>
+      <div style={{textAlign:"right", padding:"10px"}}>
+      <Button variant="contained" color='secondary'>Total Employees = {rows.length}</Button> &nbsp; <Button variant="contained" onClick={(e)=>{
+        e.preventDefault();
+        Navigate("/new-employee");
+      }}><i className="fa-solid fa-user-plus"></i> &nbsp; New Employee</Button>
       </div>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         <TableHead>
@@ -193,7 +200,11 @@ export default function CustomPaginationActionsTable() {
                 {row.gender}
               </TableCell>
               <TableCell>
-                {row.course}
+                {row.course.map((item)=>{
+                  return (
+                    <div>{item}</div>
+                  );
+                })}
               </TableCell>
               <TableCell>
                 {row.createDate.slice(0, 10)}
@@ -203,7 +214,7 @@ export default function CustomPaginationActionsTable() {
                   e.preventDefault();
                   handleEditEmployee(row.uniqueId)
                 }}>Edit</Button> &nbsp;
-                <ResponsiveDialog />
+                {row.uniqueId && <ResponsiveDialog empId={row.uniqueId} fetchEmployeeDetails={fetchEmployeeDetails} />}
               </TableCell>
             </TableRow>
           ))}

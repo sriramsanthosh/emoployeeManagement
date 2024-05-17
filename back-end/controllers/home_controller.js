@@ -14,13 +14,13 @@ module.exports.home = (req, res)=>{
 module.exports.verifyToken = async(req, res)=>{
     try{
         let token = req.body.headers.Authorization;
-        console.log(token);
+        // console.log(token);
         if (!token || !token.startsWith('Bearer ')) {
             return res.status(203).json({ message: 'Unauthorized' });
         }
         let tokenStatus = await verifyToken(token);
         if(tokenStatus === null){
-            console.log(tokenStatus);
+            // console.log(tokenStatus);
             return res.status(201).json({
                 message: "Session Expired"
             });
@@ -30,7 +30,7 @@ module.exports.verifyToken = async(req, res)=>{
         });
     }
     catch(err){
-        console.log("Error", err);
+        // console.log("Error", err);
         return res.status(500).json({
             message: "Internal Server Error"
         });

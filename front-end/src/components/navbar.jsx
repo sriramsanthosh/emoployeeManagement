@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function NavBar() {
   const Navigate = useNavigate();
-  const [auth, setAuth] = React.useState(true);
+  const [auth, setAuth] = React.useState(localStorage.getItem("token"));
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleChange = (event) => {
@@ -43,6 +43,15 @@ export default function NavBar() {
     Navigate("/");
   }
 
+  React.useEffect(()=>{
+    if(localStorage.getItem("token")){
+      setAuth(true);
+    }
+    else{
+      setAuth(false);
+    }
+  });
+  
 
 
   return (

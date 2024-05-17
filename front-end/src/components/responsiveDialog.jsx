@@ -5,8 +5,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Axios from 'axios';
+import { useSnackbar } from 'notistack';
 
-export default function AlertDialog() {
+export default function AlertDialog(props) {
+  const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -16,6 +19,26 @@ export default function AlertDialog() {
   const handleClose = () => {
     setOpen(false);
   };
+  
+  const handleDeleteClose = async(e)=>{
+    e.preventDefault();
+    let empId = props.empId;
+    await Axios.delete(`http://localhost:8000/employee/delete?empId=${empId}`).then(async(res)=>{
+      //console.log(res.data);
+      if(res.status === 200){
+        let variant = "success";
+        enqueueSnackbar(res.data.message, { variant });
+        await props.fetchEmployeeDetails();
+      }
+    }).catch((err)=>{
+      //console.log(err);
+      let variant = "error";
+      enqueueSnackbar("Connection Error..", { variant });
+    });
+    
+    
+    setOpen(false);
+  }
 
   return (
     <React.Fragment>
@@ -38,7 +61,7 @@ export default function AlertDialog() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose} autoFocus>
+          <Button onClick={handleDeleteClose} autoFocus>
             Delete
           </Button>
         </DialogActions>
